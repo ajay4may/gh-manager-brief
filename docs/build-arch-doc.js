@@ -1,9 +1,9 @@
-// build-arch-doc.js — generate architecture.docx
+// build-arch-doc.js — architecture document v2 (CxG event agent, WorkIQ-grounded)
 const fs = require("fs");
 const path = require("path");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, ImageRun,
-  Header, Footer, AlignmentType, PageOrientation, LevelFormat,
+  Header, Footer, AlignmentType, LevelFormat,
   TableOfContents, HeadingLevel, BorderStyle, WidthType, ShadingType,
   PageNumber, PageBreak
 } = require("docx");
@@ -15,7 +15,7 @@ const outFile = path.join(here, "architecture.docx");
 const border = { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" };
 const borders = { top: border, bottom: border, left: border, right: border };
 
-const P = (text, opts = {}) => new Paragraph({ children: [new TextRun({ text, ...opts })], ...opts.paragraph });
+const P = (text, opts = {}) => new Paragraph({ children: [new TextRun({ text, ...opts })] });
 const H = (text, level) => new Paragraph({ heading: level, children: [new TextRun({ text, bold: true })] });
 const Bullet = (text) => new Paragraph({
   numbering: { reference: "bullets", level: 0 },
@@ -40,7 +40,7 @@ const table = (rows, widths) => new Table({
 
 const doc = new Document({
   creator: "gh-manager-brief",
-  title: "gh manager-brief - Architecture",
+  title: "gh manager-brief - Architecture (v2, CxG Event Agent)",
   styles: {
     default: { document: { run: { font: "Calibri", size: 22 } } },
     paragraphStyles: [
@@ -71,7 +71,7 @@ const doc = new Document({
       },
     },
     headers: { default: new Header({ children: [new Paragraph({
-      children: [new TextRun({ text: "gh manager-brief - Architecture", color: "6B7280", size: 18 })],
+      children: [new TextRun({ text: "gh manager-brief - Architecture (v2)", color: "6B7280", size: 18 })],
     })]})},
     footers: { default: new Footer({ children: [new Paragraph({
       alignment: AlignmentType.RIGHT,
@@ -81,30 +81,25 @@ const doc = new Document({
       ],
     })]})},
     children: [
-      // Title
       new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { before: 1200, after: 200 },
+        alignment: AlignmentType.CENTER, spacing: { before: 1200, after: 200 },
         children: [new TextRun({ text: "gh manager-brief", bold: true, size: 56, color: "2563EB" })],
       }),
       new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 200 },
-        children: [new TextRun({ text: "Architecture Document", bold: true, size: 36, color: "1F2937" })],
+        alignment: AlignmentType.CENTER, spacing: { after: 200 },
+        children: [new TextRun({ text: "Architecture Document - v2", bold: true, size: 36, color: "1F2937" })],
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER, spacing: { after: 800 },
+        children: [new TextRun({ text: "CxG event-brief agent, grounded in WorkIQ", italics: true, color: "6B7280", size: 22 })],
       }),
       new Paragraph({
         alignment: AlignmentType.CENTER,
-        spacing: { after: 800 },
-        children: [new TextRun({ text: "Personalized end-of-Day-3 manager briefs for workshop attendees", italics: true, color: "6B7280", size: 22 })],
-      }),
-      new Paragraph({
-        alignment: AlignmentType.CENTER,
-        children: [new TextRun({ text: `Version 1.0  |  ${new Date().toISOString().slice(0,10)}`, color: "6B7280", size: 20 })],
+        children: [new TextRun({ text: `Version 2.0  |  ${new Date().toISOString().slice(0,10)}`, color: "6B7280", size: 20 })],
       }),
 
       new Paragraph({ children: [new PageBreak()] }),
 
-      // TOC
       H("Table of Contents", HeadingLevel.HEADING_1),
       new TableOfContents("Table of Contents", { hyperlink: true, headingStyleRange: "1-3" }),
 
@@ -112,113 +107,127 @@ const doc = new Document({
 
       // 1. Overview
       H("1. Overview", HeadingLevel.HEADING_1),
-      P("gh manager-brief is a GitHub CLI extension that generates a personalized 'send this to your manager' brief for each workshop attendee at the end of Day 3. Each brief is a one-page Markdown document covering four things: what the attendee learned, what they built, what they are committing to over the next 30 days, and how their manager can help."),
-      P("The design goal is behavioral, not technical: turn managers into accountability partners rather than obstacles, and save attendees an awkward follow-up conversation they would otherwise skip."),
+      P("gh manager-brief is a GitHub CLI extension and reusable CxG-team agent that produces a manager-ready brief for any event a CxG team member attends - CXG Offsite, Partner Bootcamp, Customer Advisory Board (CAB), training, workshop, or customer meeting."),
+      P("Every fact in every brief is grounded in WorkIQ - Microsoft 365 data (meetings, transcripts, emails, Teams chats, people, docs). Local files (transcripts, agendas, notes) are optional supplements, never the primary source."),
 
-      H("1.1 Problem", HeadingLevel.HEADING_2),
-      Bullet("Multi-day workshops produce excited attendees and vague intentions."),
-      Bullet("Attendees rarely follow up with their manager - the conversation feels open-ended and high-effort."),
-      Bullet("Managers, lacking specifics, default to 'sounds great' instead of unblocking the next step."),
-      Bullet("Workshop ROI evaporates within two weeks."),
+      H("1.1 Why this exists", HeadingLevel.HEADING_2),
+      Bullet("CxG team members attend many high-signal events but skip the manager debrief because the conversation feels open-ended."),
+      Bullet("Workshop and event ROI evaporates without a structured handoff."),
+      Bullet("Managers need attendees, learnings, action items, and a concrete plan to act - all with provenance they can trust."),
 
-      H("1.2 Solution", HeadingLevel.HEADING_2),
-      P("A small CLI extension that takes a CSV of attendee responses and emits ready-to-send Markdown briefs. Each brief has a fixed shape (learned / built / committing / ask) so it reads in under two minutes. Optionally, the extension posts each brief as a GitHub issue assigned to the attendee with a 'manager-brief' label, creating a durable 30-day accountability checkpoint."),
+      H("1.2 What it produces", HeadingLevel.HEADING_2),
+      P("A Markdown brief with seven sections:"),
+      Bullet("TL;DR (3 bullets)"),
+      Bullet("Attendees (table: name, org, role, source)"),
+      Bullet("Key learnings (5-8 themes with attribution)"),
+      Bullet("Action items (owner, action, due, source)"),
+      Bullet("My plan to act (next step, by when, who I need - for actions you own)"),
+      Bullet("Follow-ups since the event (post-event emails/chats from WorkIQ)"),
+      Bullet("How my manager can help (your specific ask)"),
+      P("Every claim ends with a footnote like [^wq1] linking to the exact WorkIQ query in the Sources section."),
 
       // 2. Architecture
       H("2. Architecture", HeadingLevel.HEADING_1),
-      P("The system has four stages: Capture, Generation, Output, and Outcome. The diagram below shows the flow."),
-
-      // Diagram image
+      P("Six logical components, illustrated below."),
       new Paragraph({
         alignment: AlignmentType.CENTER,
         spacing: { before: 200, after: 200 },
         children: [new ImageRun({
           type: "png",
           data: fs.readFileSync(diagram),
-          transformation: { width: 600, height: 338 },
-          altText: { title: "Architecture diagram", description: "gh manager-brief architecture diagram", name: "ArchitectureDiagram" },
+          transformation: { width: 600, height: 353 },
+          altText: { title: "Architecture v2", description: "WorkIQ-grounded event agent", name: "ArchV2" },
         })],
       }),
       new Paragraph({
         alignment: AlignmentType.CENTER,
-        children: [new TextRun({ text: "Figure 1: End-to-end flow from attendee response to manager handoff.", italics: true, color: "6B7280", size: 18 })],
+        children: [new TextRun({ text: "Figure 1: WorkIQ-grounded event-brief agent flow.", italics: true, color: "6B7280", size: 18 })],
       }),
 
-      // 3. Components
-      H("3. Components", HeadingLevel.HEADING_1),
+      H("2.1 Components", HeadingLevel.HEADING_2),
       table([
-        ["Component", "Type", "Responsibility"],
-        ["gh-manager-brief (script)", "Bash entry point", "Parses CLI flags, reads CSV, loops attendees, renders each brief."],
-        ["attendees.csv", "Input", "Single source of truth for attendee data. One row per attendee."],
-        ["out/<handle>.md", "Output", "One Markdown brief per attendee. Self-contained; safe to email."],
-        ["gh issue create", "Optional output", "Posts each brief as a GitHub issue, assigned to attendee, labeled 'manager-brief'."],
-        ["GitHub CLI auth", "Dependency", "Reuses existing gh authentication; no token management in the extension."],
-      ], [2600, 2200, 4560]),
+        ["#", "Component", "Responsibility"],
+        ["1", "Trigger (CLI)", "User runs gh manager-brief event with type/name/date window."],
+        ["2", "Agent (event_brief.py)", "Orchestrates queries, parsing, rendering. Pure Python, no LLM dependency in Phase 1."],
+        ["3", "WorkIQ grounding", "Primary data source. Queried via subprocess workiq.cmd ask."],
+        ["4", "Eval suite", "Offline regression. Fixture-driven, no network calls."],
+        ["5", "Output (Markdown)", "Manager-ready brief, 7 sections, with provenance footnotes."],
+        ["6", "Manager outcome", "Concrete attendees, commitments, plan to act - all traceable."],
+      ], [600, 2500, 6260]),
 
-      // 4. Data Flow
-      H("4. Data flow", HeadingLevel.HEADING_1),
-      P("Step-by-step:"),
-      Bullet("Facilitator collects attendee responses via Form / GitHub Discussion / interview."),
-      Bullet("Responses are exported to a CSV with columns: handle, name, manager_email, learned, built, committing, ask."),
-      Bullet("Facilitator runs: gh manager-brief generate --input attendees.csv --out ./out"),
-      Bullet("The extension iterates rows, rendering one Markdown file per attendee into ./out."),
-      Bullet("If --post-issue OWNER/REPO is supplied, each brief is also posted as an issue assigned to the attendee."),
-      Bullet("Attendee receives the brief (file or issue notification), forwards it to their manager."),
-      Bullet("Manager replies with concrete support; the issue (if used) becomes the 30-day checkpoint."),
+      // 3. Data flow
+      H("3. Data flow", HeadingLevel.HEADING_1),
+      Bullet("User runs the event subcommand with --type, --name, --from, --to."),
+      Bullet("Agent builds four WorkIQ queries (attendees, themes, action items, follow-ups)."),
+      Bullet("Each query is dispatched via workiq.cmd ask -q '...' (subprocess). Response captured verbatim."),
+      Bullet("Per-domain extractors parse responses into structured rows and tag each with a provenance ID."),
+      Bullet("Optional local files (.vtt, .docx, .md) are folded in as supplements, not as primary sources."),
+      Bullet("Markdown renderer emits the brief with footnotes; Sources section lists every WorkIQ query verbatim."),
+      Bullet("User reviews and forwards to manager. Never auto-sent."),
 
-      // 5. CSV Schema
-      H("5. CSV schema", HeadingLevel.HEADING_1),
+      // 4. WorkIQ queries
+      H("4. WorkIQ query templates", HeadingLevel.HEADING_1),
+      P("All four queries are pure natural language - WorkIQ handles retrieval and summarization."),
       table([
-        ["Column", "Type", "Purpose"],
-        ["handle", "string", "GitHub username (also used as output filename)."],
-        ["name", "string", "Display name for the brief header."],
-        ["manager_email", "string", "Listed in the brief so the attendee knows who to send it to."],
-        ["learned", "text", "Free-form: what concepts or skills the attendee absorbed."],
-        ["built", "text", "Free-form: what artifact the attendee shipped during the workshop."],
-        ["committing", "text", "Free-form: 30-day commitment, ideally measurable."],
-        ["ask", "text", "Free-form: specific support needed from the manager."],
-      ], [1800, 1400, 6160]),
-      P("Fields containing commas must be wrapped in double quotes per RFC 4180.", { italics: true }),
+        ["Domain", "Question shape"],
+        ["Attendees", "List people who attended meetings titled or about '{event}' between {from}-{to}, with name, org, role."],
+        ["Themes", "Summarize 5-8 most important topics in meetings about '{event}' between {from}-{to}, with attribution."],
+        ["Action items", "List action items, owners, and due dates from meetings about '{event}' between {from}-{to}."],
+        ["Follow-ups", "After {to}, find emails/Teams messages referencing '{event}' with new commitments or updates."],
+      ], [2200, 7160]),
 
-      // 6. Distribution
-      H("6. Distribution", HeadingLevel.HEADING_1),
-      P("The extension is distributed as a GitHub repository named 'gh-manager-brief'. The 'gh-' prefix is required for gh to recognize it as an extension."),
-      H("6.1 Install", HeadingLevel.HEADING_2),
-      P("gh extension install <org>/gh-manager-brief", { font: "Consolas" }),
-      H("6.2 Update", HeadingLevel.HEADING_2),
-      P("gh extension upgrade manager-brief", { font: "Consolas" }),
-      H("6.3 Uninstall", HeadingLevel.HEADING_2),
-      P("gh extension remove manager-brief", { font: "Consolas" }),
+      // 5. Provenance
+      H("5. Provenance model", HeadingLevel.HEADING_1),
+      Bullet("Each WorkIQ call gets a sequential source ID (wq1, wq2, ...)."),
+      Bullet("Every fact rendered from that call carries the marker [^wqN]."),
+      Bullet("Sources section at the bottom of the brief lists each marker with the exact WorkIQ question."),
+      Bullet("A manager can re-run any question in WorkIQ to verify."),
+      Bullet("Local supplements are tagged [local transcript] or [user hint] - clearly not WorkIQ-grounded."),
 
-      // 7. Security & Privacy
-      H("7. Security and privacy", HeadingLevel.HEADING_1),
-      Bullet("Attendee data lives only in the CSV and the generated Markdown - no external services, no telemetry."),
-      Bullet("When --post-issue is used, briefs become content in the target GitHub repo. Use a private repo for sensitive workshops."),
-      Bullet("Manager email addresses are written into the brief body. If the issue path is used, this lands in GitHub - confirm attendees are OK with that."),
-      Bullet("The extension inherits gh authentication; no additional secrets are stored."),
+      // 6. Privacy
+      H("6. Privacy and trust boundary", HeadingLevel.HEADING_1),
+      Bullet("WorkIQ stays inside the Microsoft trust boundary; no third-party APIs are called."),
+      Bullet("For sensitive events (CAB, customer 1:1), use --no-workiq to operate on local files only."),
+      Bullet("Briefs are written to local disk only; the agent never auto-sends."),
+      Bullet("Generated briefs may carry the sensitivity of the underlying transcripts - label them before sharing."),
 
-      // 8. Extension points
-      H("8. Extension points (future)", HeadingLevel.HEADING_1),
-      Bullet("--email-via-graph: send each brief directly to manager_email via Microsoft Graph."),
-      Bullet("--template <path>: support custom Markdown templates per organization."),
-      Bullet("--checkin-days N: auto-create a follow-up issue at day N referencing the original brief."),
-      Bullet("--source discussion: pull responses directly from a GitHub Discussion thread instead of CSV."),
+      // 7. Reuse model
+      H("7. CxG team reuse model", HeadingLevel.HEADING_1),
+      P("The extension is the same install command for everyone on CxG:"),
+      P("gh extension install ajay4may/gh-manager-brief", { font: "Consolas" }),
+      P("Per-user state (manager email, display name) can be passed at the command line or set as environment variables. Phase 3 will add a config file."),
 
-      // 9. Operations
-      H("9. Operations", HeadingLevel.HEADING_1),
-      table([
-        ["Concern", "How it's handled"],
-        ["Runtime errors", "Bash 'set -euo pipefail' aborts on first failure; partial output remains for inspection."],
-        ["Idempotency", "Re-running overwrites Markdown files. Issue posting is NOT idempotent - use a fresh label or dedicated repo per cohort."],
-        ["Logging", "Each generated file and posted issue is echoed to stdout."],
-        ["Cross-platform", "Runs natively on macOS/Linux. Windows uses Git Bash, which gh invokes automatically."],
-      ], [3000, 6360]),
+      // 8. Eval
+      H("8. Eval suite", HeadingLevel.HEADING_1),
+      P("Offline, fixture-driven. Three cases ship in the repo: CXG offsite, Partner Bootcamp, Q2 CAB."),
+      P("Run with: gh manager-brief eval", { font: "Consolas" }),
+      P("Each case provides plain-text WorkIQ response fixtures (attendees.txt, themes.txt, actions.txt, followups.txt). The agent's --fixture-dir flag loads these instead of calling WorkIQ. The eval validates the generated brief against shape checks (section presence) and minimum counts (attendees, themes, actions)."),
+      P("Add a new case by dropping a folder into eval/fixtures/<case>/ and appending an entry to CASES in eval/run_evals.py."),
 
-      // 10. Glossary
-      H("10. Glossary", HeadingLevel.HEADING_1),
-      Bullet("Brief: the one-page Markdown document a single attendee sends to their manager."),
-      Bullet("Cohort: a group of attendees from a single workshop run."),
-      Bullet("Ask: the concrete unblock or support request made of the manager."),
+      // 9. Extension points
+      H("9. Future work", HeadingLevel.HEADING_1),
+      Bullet("LLM-assisted clustering of themes via Microsoft-internal endpoint."),
+      Bullet("DOCX output (manager-friendly Word doc)."),
+      Bullet("Auto-create follow-up issue at day 30 referencing the original brief."),
+      Bullet("Email the brief via Microsoft Graph (with explicit user confirmation)."),
+      Bullet("Per-user config file (~/.config/gh-manager-brief/config.yml)."),
+      Bullet("MIP sensitivity propagation: stamp brief filename + header with highest sensitivity encountered."),
+
+      // 10. File layout
+      H("10. File layout", HeadingLevel.HEADING_1),
+      P("gh-manager-brief", { font: "Consolas" }),
+      P("├── gh-manager-brief            # bash entry, dispatches subcommands", { font: "Consolas" }),
+      P("├── lib/", { font: "Consolas" }),
+      P("│   ├── event_brief.py          # main pipeline", { font: "Consolas" }),
+      P("│   ├── workiq/                 # client + question templates", { font: "Consolas" }),
+      P("│   ├── extractors/             # attendees / themes / actions / followups", { font: "Consolas" }),
+      P("│   ├── parsers/                # vtt + plain text", { font: "Consolas" }),
+      P("│   └── renderers/md.py         # Markdown with provenance", { font: "Consolas" }),
+      P("├── eval/", { font: "Consolas" }),
+      P("│   ├── run_evals.py            # eval runner", { font: "Consolas" }),
+      P("│   └── fixtures/               # WorkIQ response fixtures per case", { font: "Consolas" }),
+      P("├── samples/attendees.csv       # CSV template for 'generate'", { font: "Consolas" }),
+      P("└── docs/                       # this document, diagram, tutorial video", { font: "Consolas" }),
     ],
   }],
 });

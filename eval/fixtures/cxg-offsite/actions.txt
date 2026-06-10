@@ -1,0 +1,5 @@
+- Owner: Sarah Chen | Action: publish an agent template gallery for CxG customers | Due: 2026-07-15
+- Owner: Raj Patel | Action: draft a Q3 partner bootcamp curriculum | Due: 2026-06-30
+- Owner: Priya Nair | Action: kick off Sandbox storage cleanup with top 25 accounts | Due: 2026-06-20
+- Owner: Ajay Singh | Action: build the manager-brief agent and pilot across CxG | Due: 2026-06-17
+- Owner: Yuki Tanaka | Action: align with marketing on three scalability customer stories | Due: 2026-07-01

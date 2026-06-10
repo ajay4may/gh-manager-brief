@@ -4,6 +4,13 @@ docs/_video_build/
 # Generated briefs (don't commit attendee data)
 out/
 
+# Eval scratch
+eval/_out/
+
+# Python
+__pycache__/
+*.pyc
+
 # OS
 .DS_Store
 Thumbs.db

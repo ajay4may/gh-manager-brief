@@ -1,0 +1,3 @@
+- **Hands-on labs land best**: partners want fewer slides and more guided builds — Anita pushed this twice.
+- **Pricing clarity**: confusion around Copilot Studio licensing dominated the Day 2 Q&A.
+- **Reference architectures**: partners want a downloadable starter kit they can fork on Day 1.

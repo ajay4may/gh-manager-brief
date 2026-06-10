@@ -1,0 +1,2 @@
+- Owner: Marcus Lee | Action: publish a one-pager on Copilot Studio licensing tiers | Due: 2026-05-12
+- Owner: Anita Roy | Action: pilot the starter kit with two Globex customers | Due: 2026-06-01

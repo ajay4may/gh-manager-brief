@@ -1,0 +1,3 @@
+- **Number sequence performance**: Acme and Stark both flagged sequence contention under peak load.
+- **Index hygiene**: customers want a self-service unused-index report.
+- **Storage transparency**: cost visibility per legal entity is still the #1 ask.

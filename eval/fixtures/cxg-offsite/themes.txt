@@ -1,0 +1,5 @@
+- **AI agent adoption in CxG**: Adoption is bottlenecked by lack of pre-built agent templates customers can trust — raised by Sarah Chen.
+- **Scalability stories matter**: Our top accounts (JM Family, Don Pasquale) need crisp narratives to defend their architecture decisions internally — Yuki Tanaka pushed this hard.
+- **Partner enablement gap**: SIs are not ready to ship copilots; we need a hands-on bootcamp by Q3 — Diego Rivera flagged.
+- **Sandbox cost reduction**: Top 25 sandboxes account for ~60% of storage spend; a guided cleanup program is the right play.
+- **Sales Order Agent KPIs**: Adoption is climbing but conversion from Sandbox to Live stalls at 38%; needs a friction analysis.
