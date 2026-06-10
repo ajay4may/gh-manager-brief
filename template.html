@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CXG Offsite · Manager Brief</title>
+<!--
+  Manager Brief output template. The skill substitutes the {{TOKENS}} below.
+  Tokens:
+    {{ATTENDEE}} {{ROLE}} {{MANAGER}} {{MANAGER_EMAIL}} {{MANAGER_FIRST}}
+    {{POD}} {{PROJECT}} {{MINI_PROJECT}} {{TEAMMATES}} {{TOOLS}}
+    {{BUILT_DETAIL}}
+    {{LEARNED_ITEMS}}      <!-- <li>…</li> list items -->
+    {{COMMITMENT_ITEMS}}   <!-- <li>…</li> list items -->
+    {{ASK_ITEMS}}          <!-- <li>…</li> list items -->
+    {{ONE_THING}}
+    {{GENERATED_DATE}}
+-->
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+    const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --cp-bg: #f7f4ef; --cp-bg-elevated: #fcfbf8; --cp-surface: #ffffff;
+    --cp-border: #dedede; --cp-text: #242424; --cp-text-muted: #5c5c5c; --cp-text-soft: #6f6f6f;
+    --cp-accent: #b11f4b;
+    --cxg-crimson: #a4262c; --cxg-crimson-dark: #8a1f24; --cxg-navy: #1b1f3b; --cxg-purple: #3b2a5a;
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --cp-bg: #3d3b3a; --cp-bg-elevated: #343231; --cp-surface: #292929;
+    --cp-border: #474747; --cp-text: #dedede; --cp-text-muted: #919191; --cp-text-soft: #b0b0b0;
+    --cp-accent: #fd8ea1;
+    --cxg-crimson: #e86a70; --cxg-crimson-dark: #c9484e; --cxg-navy: #c9cbe0; --cxg-purple: #b9a9d6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--cp-bg); color: var(--cp-text);
+    font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.55;
+  }
+  .topbar {
+    background: linear-gradient(135deg, var(--cxg-navy) 0%, var(--cxg-purple) 55%, var(--cxg-crimson-dark) 100%);
+    color: #fff; padding: 22px 28px; display: flex; align-items: center; gap: 14px;
+  }
+  .topbar .titles h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+  .topbar .titles p { margin: 2px 0 0; font-size: .8rem; opacity: .85; }
+  .topbar .pill {
+    margin-left: auto; font-size: .72rem; background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.28); padding: 5px 11px; border-radius: 999px;
+  }
+  .wrap { max-width: 680px; margin: 30px auto; padding: 0 20px 50px; }
+  .brief {
+    background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px;
+    padding: 30px 34px; font-size: .92rem;
+    box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+  }
+  .brief .to { font-size: .78rem; color: var(--cp-text-muted); }
+  .brief .subject { font-size: 1.12rem; font-weight: 700; margin: 8px 0 18px; }
+  .brief h3 {
+    font-size: .8rem; text-transform: uppercase; letter-spacing: .6px; color: var(--cp-accent);
+    margin: 20px 0 6px; border-bottom: 1px solid var(--cp-border); padding-bottom: 4px;
+  }
+  .brief h3:first-of-type { margin-top: 0; }
+  .brief p { margin: 0 0 9px; }
+  .brief ul { margin: 0 0 9px; padding-left: 20px; }
+  .brief li { margin-bottom: 5px; }
+  .brief .muted { color: var(--cp-text-muted); }
+  .brief .sig { margin-top: 20px; color: var(--cp-text-muted); }
+  .foot { margin-top: 14px; font-size: .72rem; color: var(--cp-text-soft); text-align: center; }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="titles">
+      <h1>Manager Brief</h1>
+      <p>CXG Americas Offsite · June 9–11, 2026 · Redmond</p>
+    </div>
+    <span class="pill">Day 3 · Send-to-Manager</span>
+  </div>
+
+  <div class="wrap">
+    <div class="brief">
+      <div class="to">To: {{MANAGER}} &lt;{{MANAGER_EMAIL}}&gt;</div>
+      <div class="subject">My CXG Offsite recap — and one ask for your help</div>
+
+      <p>Hi {{MANAGER_FIRST}} — I just wrapped three days at the CXG Americas Offsite (June 9–11, Redmond). Here's a quick brief on what I took away and where I'd value your support.</p>
+
+      <h3>What I learned</h3>
+      <ul>{{LEARNED_ITEMS}}</ul>
+
+      <h3>What I built</h3>
+      <p>My pod <strong>{{POD}}</strong> (with {{TEAMMATES}}) was assigned the <strong>{{PROJECT}}</strong> theme. For the Day-2 mini hack we built <strong>{{MINI_PROJECT}}</strong>. {{BUILT_DETAIL}}</p>
+      <p class="muted">Tools I worked with: {{TOOLS}}.</p>
+
+      <h3>What I'm committing to</h3>
+      <ul>{{COMMITMENT_ITEMS}}</ul>
+
+      <h3>How you can help</h3>
+      <ul>{{ASK_ITEMS}}</ul>
+
+      <h3>For our next 1:1</h3>
+      <p>One thing I'd love your read on: <strong>{{ONE_THING}}</strong></p>
+
+      <p class="sig">Thanks,<br>{{ATTENDEE}}<br><span class="muted">{{ROLE}}</span></p>
+    </div>
+    <div class="foot">Generated {{GENERATED_DATE}} · CXG Americas Offsite 2026 · Review before sending — nothing is sent automatically.</div>
+  </div>
+</body>
+</html>
