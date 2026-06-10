@@ -1,0 +1,13 @@
+# Tutorial video build scratch (intermediate slides + wavs)
+docs/_video_build/
+
+# Generated briefs (don't commit attendee data)
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
