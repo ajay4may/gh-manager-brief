@@ -1,0 +1,3 @@
+handle,name,manager_email,learned,built,committing,ask
+ajay4may,Ajay Singh,manager@example.com,"How retrieval-augmented agents work end-to-end; tradeoffs between fine-tuning and RAG.","A working ""sales order triage"" agent that classifies inbound POs and drafts replies.","Pilot the triage agent with 2 internal teams; publish a 1-page ROI memo in 30 days.","Help me get 30 minutes with the SalesOps lead and unblock access to the sandbox tenant."
+jdoe,Jane Doe,jane.manager@example.com,"Evaluation harnesses for LLM apps — precision/recall vs. user-perceived quality.","An eval suite for our support bot covering 50 real tickets.","Wire eval suite into CI; set a quality gate before next release.","Approve 2 hrs/week for the next month and intro me to the QA lead."
